@@ -1,7 +1,9 @@
+import { Content } from './components/Content'
+
 const App = () => {
   return (
     <div className="App">
-      hola
+      <Content />
     </div>
   );
 }
