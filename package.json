@@ -2,6 +2,8 @@
   "name": "fluent-dns-ui",
   "version": "0.1.0",
   "private": true,
+  "author": "suitux",
+  "license": "MIT",
   "dependencies": {
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
