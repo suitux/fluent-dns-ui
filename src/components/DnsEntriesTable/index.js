@@ -36,6 +36,17 @@ const DnsEntriesTableComponent = ({ classes }) => {
                 options={{
                     actionsColumnIndex: -1,
                 }}
+                actions={[
+                    {
+                        icon: 'refresh',
+                        tooltip: 'Refresh Data',
+                        isFreeAction: true,
+                        onClick: () => {
+                            setLoading(true)
+                            fetchData()
+                        },
+                    }
+                ]}
                 editable={{
                     onRowAdd: (newData) => {
                         return fetch(endpointUrl, {
