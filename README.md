@@ -4,7 +4,8 @@ UI to manage [Fluent DNS](https://github.com/suitux/fluent-dns)
 
 ## Installation
 
-Download this repository.
+1. As this UI is created in order to manage the [Fluent DNS](https://github.com/suitux/fluent-dns), you should download and start it previously.
+2. Download this repository.
 
 ```
 git clone https://github.com/suitux/fluent-dns-ui
