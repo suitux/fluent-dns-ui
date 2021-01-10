@@ -4,6 +4,8 @@ import './index.css'
 import App from './App'
 import theme from './theme'
 import { CssBaseline, ThemeProvider } from '@material-ui/core'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify'
 
 ReactDOM.render(
     <React.StrictMode>
@@ -11,6 +13,7 @@ ReactDOM.render(
             <CssBaseline />
             <App />
         </ThemeProvider>
+        <ToastContainer />
     </React.StrictMode>,
     document.getElementById('root')
 )

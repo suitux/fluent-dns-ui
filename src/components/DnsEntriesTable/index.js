@@ -6,6 +6,7 @@ import MaterialTable from 'material-table'
 import { columns } from './table/columns'
 import { env } from '../../env'
 import * as _ from 'lodash'
+import { toast, ToastContainer } from 'react-toastify'
 
 const endpointUrl = `${env.local.dnsApiUrl}/entries`
 
@@ -20,6 +21,17 @@ const DnsEntriesTableComponent = ({ classes }) => {
                 setEntries(result)
                 setLoading(false)
             })
+    }
+
+    const showError = (message) => {
+        toast.error(message, {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
     }
 
     React.useEffect(() => {
@@ -50,9 +62,8 @@ const DnsEntriesTableComponent = ({ classes }) => {
                                 if(!response.error) {
                                     setEntries([...entries, response.data])
                                 } else {
-
+                                    showError(response.message)
                                 }
-
                             })
                             .catch((err) => {
                                 console.log(err)
