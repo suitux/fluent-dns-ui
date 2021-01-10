@@ -17,7 +17,6 @@ const DnsEntriesTableComponent = ({ classes }) => {
         fetch(endpointUrl)
             .then((response) => response.json())
             .then((result) => {
-                debugger
                 setEntries(result)
                 setLoading(false)
             })
@@ -48,7 +47,12 @@ const DnsEntriesTableComponent = ({ classes }) => {
                         })
                             .then((res) => res.json())
                             .then((response) => {
-                                setEntries([...entries, response.data])
+                                if(!response.error) {
+                                    setEntries([...entries, response.data])
+                                } else {
+
+                                }
+
                             })
                             .catch((err) => {
                                 console.log(err)
