@@ -47,6 +47,7 @@ const DnsEntriesTableComponent = ({ classes }) => {
                 isLoading={isLoading}
                 options={{
                     actionsColumnIndex: -1,
+                    maxBodyHeight: '75vh'
                 }}
                 editable={{
                     onRowAdd: (newData) => {
