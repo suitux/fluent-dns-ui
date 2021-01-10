@@ -17,6 +17,7 @@ const DnsEntriesTableComponent = ({ classes }) => {
         fetch(endpointUrl)
             .then((response) => response.json())
             .then((result) => {
+                debugger
                 setEntries(result)
                 setLoading(false)
             })
@@ -36,17 +37,6 @@ const DnsEntriesTableComponent = ({ classes }) => {
                 options={{
                     actionsColumnIndex: -1,
                 }}
-                actions={[
-                    {
-                        icon: 'refresh',
-                        tooltip: 'Refresh Data',
-                        isFreeAction: true,
-                        onClick: () => {
-                            setLoading(true)
-                            fetchData()
-                        },
-                    }
-                ]}
                 editable={{
                     onRowAdd: (newData) => {
                         return fetch(endpointUrl, {
