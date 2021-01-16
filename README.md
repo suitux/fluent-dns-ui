@@ -1,4 +1,6 @@
-# Fluent DNS UI
+<p align="center"> 
+    <img src="https://raw.githubusercontent.com/suitux/fluent-dns-ui/master/fluent-dns-logo-ui-react.png" alt="Fluent DNS UI Logo" width="250">
+</p>
 
 UI to manage [Fluent DNS](https://github.com/suitux/fluent-dns)
 
