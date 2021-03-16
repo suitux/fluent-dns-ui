@@ -1,37 +1,56 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { withStyles } from '@material-ui/styles'
 import styles from './styles'
 import Paper from '@material-ui/core/Paper'
 import MaterialTable from 'material-table'
 import { columns } from './table/columns'
-import { env } from '../../env'
 import * as _ from 'lodash'
-import { toast, ToastContainer } from 'react-toastify'
-
-const endpointUrl = `${env.local.dnsApiUrl}/entries`
+import { showError } from '../../helpers/showError'
+import { DnsContext } from '../../context/dns/DnsContext'
 
 const DnsEntriesTableComponent = ({ classes }) => {
     const [isLoading, setLoading] = React.useState(true)
-    const [entries, setEntries] = React.useState([])
+    const {
+        entries,
+        setEntries,
+        fetchDnsEntries,
+        addDnsEntry,
+        updateDnsEntry,
+        deleteDnsEntry,
+    } = useContext(DnsContext)
 
-    const fetchData = () => {
-        fetch(endpointUrl)
-            .then((response) => response.json())
-            .then((result) => {
-                setEntries(result)
-                setLoading(false)
-            })
+    const fetchData = async () => {
+        fetchDnsEntries()
+        setLoading(false)
     }
 
-    const showError = (message) => {
-        toast.error(message, {
-            position: "bottom-right",
-            autoClose: 4000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-        });
+    const onRowAdd = async (newData) => {
+        const response = await addDnsEntry(newData)
+        if (!response.error) {
+            setEntries([...entries, response.data])
+        } else {
+            showError(response.message)
+        }
+    }
+
+    const onRowUpdate = async (newData, oldData) => {
+        const response = await updateDnsEntry(newData, oldData.id)
+        const changedIndex = _.findIndex(
+            entries,
+            (entry) => entry.id === response.data.id
+        )
+
+        const newEntries = [...entries]
+        newEntries[changedIndex] = response.data
+        setEntries(newEntries)
+    }
+
+    const onRowDelete = async (oldData) => {
+        const response = await deleteDnsEntry(oldData.id)
+
+        setEntries(
+            _.remove(entries, (entry) => entry.id !== response.removedId)
+        )
     }
 
     React.useEffect(() => {
@@ -47,77 +66,12 @@ const DnsEntriesTableComponent = ({ classes }) => {
                 isLoading={isLoading}
                 options={{
                     actionsColumnIndex: -1,
-                    maxBodyHeight: '75vh'
+                    maxBodyHeight: '75vh',
                 }}
                 editable={{
-                    onRowAdd: (newData) => {
-                        return fetch(endpointUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(newData),
-                        })
-                            .then((res) => res.json())
-                            .then((response) => {
-                                if(!response.error) {
-                                    setEntries([...entries, response.data])
-                                } else {
-                                    showError(response.message)
-                                }
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                            })
-                    },
-                    onRowUpdate: (newData, oldData) => {
-                        return fetch(endpointUrl, {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                id: oldData.id,
-                                data: newData,
-                            }),
-                        })
-                            .then((res) => res.json())
-                            .then((response) => {
-                                const changedIndex = _.findIndex(
-                                    entries,
-                                    (entry) => entry.id === response.data.id
-                                )
-
-                                const newEntries = [...entries]
-                                newEntries[changedIndex] = response.data
-                                setEntries(newEntries)
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                            })
-                    },
-                    onRowDelete: (oldData) => {
-                        return fetch(endpointUrl, {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ id: oldData.id }),
-                        })
-                            .then((res) => res.json())
-                            .then((response) => {
-                                setEntries(
-                                    _.remove(
-                                        entries,
-                                        (entry) =>
-                                            entry.id !== response.removedId
-                                    )
-                                )
-                            })
-                            .catch((err) => {
-                                console.log(err)
-                            })
-                    },
+                    onRowAdd,
+                    onRowUpdate,
+                    onRowDelete,
                 }}
             />
         </Paper>
