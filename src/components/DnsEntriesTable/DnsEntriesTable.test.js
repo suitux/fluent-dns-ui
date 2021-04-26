@@ -1,3 +1,4 @@
+import React from 'react'
 import { render } from '@testing-library/react'
 import { DnsContext } from '../../context/dns/DnsContext'
 import { DnsEntriesTable } from './index'
