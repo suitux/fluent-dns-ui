@@ -12,7 +12,7 @@ const entries = [
         class: 0x03,
     },
     {
-        name: 'name1',
+        name: 'name2',
         address: '192.168.1.1',
         ttl: 200,
         type: 0x02,
@@ -20,16 +20,30 @@ const entries = [
     },
 ]
 
-test('Render table without elements', () => {
+describe('DnsEntriesTable tests', () => {
+    test('Render table without elements', () => {
+        const fetchDnsEntries = jest.fn()
 
-    const fetchDnsEntries = jest.fn()
+        const { queryByText } = render(
+            <DnsContext.Provider value={{ entries: [], fetchDnsEntries }}>
+                <DnsEntriesTable />
+            </DnsContext.Provider>
+        )
 
-    const { queryByText } = render(
-        <DnsContext.Provider value={{ entries: [], fetchDnsEntries }}>
-            <DnsEntriesTable />
-        </DnsContext.Provider>
-    )
+        expect(fetchDnsEntries).toBeCalled()
+        expect(queryByText('No records to display')).toBeTruthy()
+    })
 
-    expect(fetchDnsEntries).toBeCalled();
-    expect(queryByText('No records to display')).toBeTruthy()
+    test('Render table with elements', () => {
+        const fetchDnsEntries = jest.fn()
+
+        const { queryByText } = render(
+            <DnsContext.Provider value={{ entries, fetchDnsEntries }}>
+                <DnsEntriesTable />
+            </DnsContext.Provider>
+        )
+
+        expect(fetchDnsEntries).toBeCalled()
+        expect(queryByText('name1')).toBeTruthy()
+    })
 })
