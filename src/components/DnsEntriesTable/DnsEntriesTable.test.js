@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 import { DnsContext } from '../../context/dns/DnsContext'
 import { DnsEntriesTable } from './index'
 
@@ -46,4 +46,20 @@ describe('DnsEntriesTable tests', () => {
         expect(fetchDnsEntries).toBeCalled()
         expect(queryByText('name1')).toBeTruthy()
     })
+
+    test('On add_box click, a new row displays to the user', () => {
+        const fetchDnsEntries = jest.fn()
+
+        const { queryByText } = render(
+            <DnsContext.Provider value={{ entries: [], fetchDnsEntries }}>
+                <DnsEntriesTable />
+            </DnsContext.Provider>
+        )
+
+        fireEvent.click(queryByText('add_box'))
+
+        expect(queryByText('check')).toBeTruthy()
+        expect(fetchDnsEntries).toBeCalled()
+    })
+
 })
